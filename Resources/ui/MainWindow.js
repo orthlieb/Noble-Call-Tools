@@ -211,7 +211,16 @@ function mainButtonGridClick(e) {
 			win.add(bg.scrollview);
 			navController.open(win);
 			// Add to the Nav controller.
-			bg.relayout(Ti.Platform.displayCaps.platformWidth);
+			bg.relayout(Ti.Platform.displayCaps.platformWidth);	
+			
+			// Handle orientation
+			function relayoutCourageousWindow(e) {
+				bg.relayout(Ti.Platform.displayCaps.platformWidth);
+			};		
+			win.addEventListener('close', function courageousWindowClose(e) {
+				Ti.Gesture.removeEventListener('orientationchange', relayoutCourageousWindow);
+			});
+			Ti.Gesture.addEventListener('orientationchange', relayoutCourageousWindow);			
 			break;
 		case 'identity':
 			// There are 2 paths through identity. We need to ask the user whether they are a man or a woman.
@@ -260,21 +269,18 @@ function open() {
 	w.rightNavButton = mainSettingsButton;
 
 	var mainButtonGrid = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, mainButtons, mainButtonGridClick);
-	w.add(mainButtonGrid.scrollview);
 	// Must have a window to host the button grid.
+	w.add(mainButtonGrid.scrollview);
 	w.barColor = style.color.navBar;
-	navController.open(w);
 	// Nav controller is our root.
+	navController.open(w);
 
-	w.addEventListener('open', function() {
+	// Handle orientation
+	function relayoutMainWindow(e) {
 		mainButtonGrid.relayout(Ti.Platform.displayCaps.platformWidth);
-		// Relayout buttons with animation.
-	});
-
-	Ti.Gesture.addEventListener('orientationchange', function relayoutMainWindow(e) {
-		mainButtonGrid.relayout(Ti.Platform.displayCaps.platformWidth);
-		// Relayout buttons with animation.
-	});
+	}
+	w.addEventListener('open', relayoutMainWindow);
+	Ti.Gesture.addEventListener('orientationchange', relayoutMainWindow);
 };
 
 // Exports
