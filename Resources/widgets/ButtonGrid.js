@@ -2,24 +2,26 @@
 // === Button Grid View
 // A grid of buttons in a scroll view.
 // @viewWidth		integer	Width of the view (height is 'auto')
-// @buttons			array     Array button structs with the following properties [ {
+// @buttons			array	Array button structs with the following properties [ {
 //                              id: unique string
 //                              title: string denoting the title/label on the button suitable for display
 //                              image: image to display (should be in images/<image>Normal.png and images/<image>Selected.png)
 //                              offset: offset in pixels from the bottom of the button for the label (useful for adjusting 1 vs 2 line labels)
 //                          } ]
+// @dimButtons		array	Array of w, h for the button image
 // @click			function 	Function to call when the button is clicked.
 // returns: button grid object
 
 var log = require('helpers/logger');
 var style = require('ui/style');
+var utils = require('helpers/utils');
 
-function ButtonGrid(viewWidth, buttons, click) {
+function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 	log.start();
 
 	this.click = click;
     this.buttons = new Array();
-    this.dimButton = { w:0, h:0 };
+    this.dimButton = dimButtons;
     
     this.scrollview = Ti.UI.createScrollView({
 		contentWidth: Ti.Platform.displayCaps.platformWidth,
@@ -34,21 +36,11 @@ function ButtonGrid(viewWidth, buttons, click) {
     var j = 0;
     for (var i in buttons) {
 		if (buttons.hasOwnProperty(i)) {
-			if (this.dimButton.w == 0) {
-				// First time through, figure out height/width of the images.
-				var imageView = Ti.UI.createImageView({
-					image: 'images/' + style.name + '/' + buttons[i].image + 'Normal.png',
-					height: 'auto',
-					width: 'auto'
-				});
-				this.dimButton = { w: imageView.size.width / 2, h: imageView.size.height / 2 }; // XXX Fix this
-			}
-			
-		    log.info('ButtonGrid: Creating button ' + i);
+		    log.info('Creating button ' + i);
 		    var button = Ti.UI.createButton({
 		       id: i,
-		       backgroundImage: 'images/' + style.name + '/' + buttons[i].image + 'Normal.png',
-		       backgroundSelectedImage: 'images/' + style.name + '/' + buttons[i].image + 'Selected.png',
+		       backgroundImage: utils.resourceDir('image') + style.name + '/' + buttons[i].image + 'Normal.png',
+		       backgroundSelectedImage: utils.resourceDir('image') + style.name + '/' + buttons[i].image + 'Selected.png',
 		       width: this.dimButton.w,
 		       height: this.dimButton.h
 		    });

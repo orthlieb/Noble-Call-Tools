@@ -81,7 +81,7 @@ function open(controller) {
 
 	for(var j = 0; j < self.urlArray.length; j++) {
 		aViews[j] = Ti.UI.createWebView({
-			url : 'HTML/' + self.urlArray[j] + '.html',
+			url : utils.resourceDir('html') + self.urlArray[j] + '.html',
 			backgroundColor : 'transparent',
 			scalesPageToFit: false
 		});

@@ -198,7 +198,7 @@ function mainButtonGridClick(e) {
 			showWebView(navController, mainButtons[theButton.id].text, mainButtons[theButton.id].url);
 			break;
 		case 'courageous':
-			var bg = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, courageousButtons, courageousButtonClick);
+			var bg = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, courageousButtons, { w: 85, h: 117.5 }, courageousButtonClick);
 			var win = ui.window({// Need a window to host the grid.
 				backButtonTitle : L('button_done'),
 				backgroundColor : style.color.backgroundColor,
@@ -268,7 +268,7 @@ function open() {
 	mainSettingsButton.addEventListener('click', mainSettingsPanel.open);
 	w.rightNavButton = mainSettingsButton;
 
-	var mainButtonGrid = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, mainButtons, mainButtonGridClick);
+	var mainButtonGrid = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, mainButtons, { w: 85, h: 117.5 }, mainButtonGridClick);
 	// Must have a window to host the button grid.
 	w.add(mainButtonGrid.scrollview);
 	w.barColor = style.color.navBar;
