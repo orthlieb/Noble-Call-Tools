@@ -8,3 +8,21 @@ exports.merge = function ObjectMerge(obj1, obj2) {
 	
 	return obj1;
 };
+
+var resource_locations;
+
+if (Ti.Platform.osname == 'android') {
+	resource_locations = {
+		'image': '/images/',
+		'html': '/HTML/'
+	};
+} else {
+	resource_locations = {
+		'image': '/images/',
+		'html': '/HTML/'
+	};
+}
+
+exports.resourceDir = function GetResourceDir(/*string*/type) {
+		return resource_locations[type];
+}
