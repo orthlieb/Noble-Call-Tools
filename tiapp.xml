@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <property name="ti.android.runtime">v8</property>
-    <sdk-version>1.8.1</sdk-version>
+    <sdk-version>2.1.0.v20120502161829</sdk-version>
     <deployment-targets>
         <target device="mobileweb">true</target>
         <target device="iphone">true</target>
-        <target device="ipad">true</target>
+        <target device="ipad">false</target>
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
     <id>com.noblecall.toolset</id>
     <name>Noble Call</name>
-    <version>1.0</version>
+    <version>1.1.1</version>
     <publisher>Noble Call</publisher>
     <url>http://www.noblecall.org</url>
-    <description>Noble Call exists to help men experience God’s pleasure as they discover their Noble Calling and become the men they were created to be: Noble Men who make Noble Plans and carry out Noble Deeds of great faith to produce fruit that will stand the test of eternity.</description>
+    <description>The Noble Call application give you quick access to all the conversation tools that you learned at the Zero to Hero conference and more! Conciliatory, Courageous, Connecting, Comforting, Collaborating: they're all here and at your finger tips. The Noble Call Institute exists to help men experience God's pleasure as they discover their Noble Calling and become the men they were created to be: Noble Men who make Noble Plans and carry out Noble Deeds of great faith to produce fruit that will stand the test of eternity.</description>
     <copyright>2012 by Noble Call Institute</copyright>
-    <icon>default_app_logo.png</icon>
+    <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
     <statusbar-style>default</statusbar-style>
@@ -27,12 +27,6 @@
     <guid>9ded7b91-d127-469c-b4ee-08b253905db8</guid>
     <iphone>
         <orientations device="iphone">
-            <orientation>Ti.UI.PORTRAIT</orientation>
-            <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
-            <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
-            <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
-        </orientations>
-        <orientations device="ipad">
             <orientation>Ti.UI.PORTRAIT</orientation>
             <orientation>Ti.UI.UPSIDE_PORTRAIT</orientation>
             <orientation>Ti.UI.LANDSCAPE_LEFT</orientation>
