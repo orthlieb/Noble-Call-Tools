@@ -1,42 +1,45 @@
 h1 {
-	color:  #000000;
-	font-family: "Helvetica Neue","Sans",sans-serif;
+	color: #000000;
+	font-family: "Helvetica Neue", "Sans", sans-serif;
 	font-size: 140%;
 }
-
 h2 {
-	color:  #000000;
+	color: #000000;
 	font-size: 120%;
 }
-
 h3 {
-	color:  #000000;
+	color: #000000;
 	font-size: 110%;
-	font-family: "Helvetica Neue","Sans",sans-serif;
+	font-family: "Helvetica Neue", "Sans", sans-serif;
 }
-
 li {
-	font-family: "Helvetica Neue","Sans",sans-serif;	
+	font-family: "Helvetica Neue", "Sans", sans-serif;
 }
-
 body {
 	font-size: 100%;
-	font-family: "Helvetica Neue","Sans",sans-serif;
+	font-family: "Helvetica Neue", "Sans", sans-serif;
 }
-
 em {
 	font-style: italic;
 }
-
 strong {
 	font-weight: bold;
 }
-
 .bibleref {
-	color:#C0C0C0;
-	background-color:#222222
+	color: #C0C0C0;
+	background-color: #222222
 }
-
-.align-right { float:right; margin: 0 0 15px 15px; padding:10px}
-.align-left { float:left; margin: 0 15px 15px 0;  padding:10px} 
-.frame { padding: 5px; border: 1px solid #aaa; }
+.align-right {
+	float: right;
+	margin: 0 0 15px 15px;
+	padding: 10px
+}
+.align-left {
+	float: left;
+	margin: 0 15px 15px 0;
+	padding: 10px
+}
+.frame {
+	padding: 5px;
+	border: 1px solid #aaa;
+}

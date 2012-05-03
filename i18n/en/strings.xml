@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 	<string name="app_title">Noble Call Tools</string>
-	<string name="armor_of_god">Armor of God</string>
+	<string name="armor_of_god">Armor</string>
 	<string name="a_great_response">Comforting Conversation</string>
 	<string name="courageous_conversation">Courageous Conversation</string>
 	<string name="conversations">Conversations</string>
@@ -30,4 +30,47 @@
 	<string name="no_quote">Sorry, the passage could not be loaded, please check your internet connection.</string>
 	<string name="loading">Loading...</string>
 	<string name="network_none">Connection Problem</string>
+	<string name="version_group">Version </string>
+	<string name="style_group">Style</string>
+	<string name="style_linen">Linen</string>
+	<string name="style_leather">Leather</string>
+	<string name="settings">Settings</string>
+	<string name="button_bug">Bug or Suggestion?</string>
+	<string name="email_subject">Noble Call Tools Bug or Suggestion</string>
+	<string name="email_body">Please detail your suggestion or bug report below:</string>
+	<string name="creed_text">The Noble Call Tools application give you quick access to all the conversation tools that you learned at the Zero to Hero conference and more! Conciliatory, Courageous, Connecting, Comforting, Collaborating: they're all here and at your finger tips.\n\nNoble Call exists to help men experience God's pleasure as they discover their Noble Calling and become the men they were created to be: Noble Men who make Noble Plans and carry out Noble Deeds of great faith to produce fruit that will stand the test of eternity.</string>
+	<string name="asv_name">American Standard Version</string>
+	<string name="asv_copyright">Public Domain</string>
+	<string name="asv_desc">The ASV has long been regarded by many scholars as the most literal English translation since the King James Version—maybe the most literal translation ever. This has made the translation very popular for careful English Bible study, but not for ease of reading. While the KJV was translated entirely from 'western manuscripts', the ASV 1901 was influenced also by the older 'eastern manuscripts' that form the basis for most of our modern English translations. Because the ASV 1901 is very difficult to find in print, Logos is pleased to be able to preserve and distribute this significant work. This is an excellent choice for comparative English study.</string>
+	<string name="amp_name">Amplified Bible</string>
+	<string name="amp_copyright">All rights reserved. For Permission To Quote information visit http://www.lockman.org/</string>
+	<string name="amp_desc">The Amplified Bible (AMP) is an English translation of the Bible produced jointly by The Zondervan Corporation and The Lockman Foundation. The first edition was published in 1965. It is largely a revision of the American Standard Version of 1901, with reference made to various texts in the original languages. It is designed to 'amplify' the text by using a system of punctuation and other typographical features to bring out all shades of meaning present in the original texts.</string>
+	<string name="cev_name">Contemporary English Version</string>
+	<string name="cev_copyright">Copyright 2006, American Bible Society</string>
+	<string name="cev_desc">The Contemporary English Version or CEV (also known as Bible for Today's Family) is a translation of the Bible into English, published by the American Bible Society.</string>
+	<string name="darby_name">1890 Darby Bible</string>
+	<string name="darby_copyright">Public Domain</string>
+	<string name="darby_desc">As an ex-Anglican minister and the founder of the Plymouth Brethren, Darby's influence started the Niagara Conferences, which were the beginnings of prophetically-oriented Bible conferences in America. First published in 1890, this translation comes after Darby's understanding of the original languages matured during the writing of his French and German translations of the Bible.</string>
+	<string name="emphbbl_name">The Emphasized Bible</string>
+	<string name="emphbbl_copyright">Public Domain</string>
+	<string name="emphbbl_desc">The Emphasized Bible, by Joseph Bryant Rotherham, is a unique translation which helps English-only Bible readers to understand the linguistic and literary nuances of the Greek and Hebrew texts. This translation aims for a literal rendering of the original languages, and adds markings to the English text to indicate emphases, parallel structures, and the other linguistic features. It also includes accent marks, brackets, indentations, and other markings within the text itself, to help communicate the features in Greek and Hebrew which are lost in translation.</string>
+	<string name="esv_name">English Standard Version</string>
+	<string name="esv_copyright">Copyright 2001 by Crossway, a publishing ministry of Good News Publishers.</string>
+	<string name="esv_desc">The ESV Bible (English Standard Version) is an “essentially literal” translation of the Bible in contemporary English. The ESV Bible emphasizes “word-for-word” accuracy, literary excellence, and depth of meaning.</string>
+	<string name="gnt_name">Good News Translation</string>
+	<string name="gnt_copyright">Copyright 1992 by American Bible Society. Used by Permission.</string>
+	<string name="gnt_desc">The Good News Bible (GNB), also called the Good News Translation (GNT), is an English language translation of the Bible by the American Bible Society, first published as the New Testament under the name Good News for Modern Man in 1966.</string>
+	<string name="kjv_name">King James Version</string>
+	<string name="kjv_copyright">Public Domain</string>
+	<string name="kjv_desc">Also known as the 'Authorized Version', The King James Version of the Bible is still the most widely used text in the English language. The Logos KJV includes the Strong's Numbers which allow English readers to identify and search for underlying Greek and Hebrew words in the original text.</string>
+	<string name="net_name">The NET Bible</string>
+	<string name="net_copyright">Copyright 1996-2006 by Biblical Studies Press, L.L.C.</string>
+	<string name="net_desc">The NET Bible is a completely new translation of the Bible with 60,932 translators' notes! It was completed by more than 25 scholars – experts in the original biblical languages – who worked directly from the best currently available Hebrew, Aramaic, and Greek texts.</string>
+	<string name="nasb_name">New American Standard Bible</string>
+	<string name="nasb_copyright">New American Standard Bible (NASB) Copyright 1960, 1962, 1963, 1968, 1971, 1972, 1973, 1975, 1977, 1995 by The Lockman Foundation, La Habra, CA. All rights reserved. Used by Permission.</string>
+	<string name="nasb_desc">The New American Standard Bible (NASB), also informally called the New American Standard Version (NASV), is an English translation of the Bible. The New Testament was first published in 1963. The complete Bible was published in 1971.</string>
+	<string name="ylt_name">Young's Literal Translation</string>
+	<string name="ylt_copyright">Public Domain</string>
+	<string name="ylt_desc">Robert Young is best known for his monumental work, Young's Analyte. Young's Literal Translation is a very good work to add to your Bible collection for text comparisons. Since this is a very literal translation, it offers a good contrast and comparison to a dynamic equivalent translatical Concordance To The Biblion like the NIV.</string>
+	<string name="info">More Info</string>
 </resources>

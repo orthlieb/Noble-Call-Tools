@@ -36,7 +36,6 @@ function esvOptions(version, verse) {
 		"output-format" : "plain-text",
 		"include-passage-references" : false,
 		"include-first-verse-numbers" : false,
-		"include-first-verse-numbers" : false,
 		"include-verse-numbers" : false,
 		"include-footnotes" : false,
 		"include-copyright" : false,
@@ -70,103 +69,103 @@ function esvStripper(phrase) {
 var bibles = {
 	'asv': {
 		id: 'asv',	// api.biblia.com
-		title : 'American Standard Version',
-		copyright : "Public Domain",
-		description : "The ASV has long been regarded by many scholars as the most literal English translation since the King James Version—maybe the most literal translation ever. This has made the translation very popular for careful English Bible study, but not for ease of reading. While the KJV was translated entirely from \"western manuscripts,\" the ASV 1901 was influenced also by the older \"eastern manuscripts\" that form the basis for most of our modern English translations. Because the ASV 1901 is very difficult to find in print, Logos is pleased to be able to preserve and distribute this significant work. This is an excellent choice for comparative English study.",
+		title : L('asv_name'),
+		copyright : L('asv_copyright'),
+		description : L('asv_desc'),
 		url: 'http://api.biblia.com/v1/bible/content/%version.txt.js',
 		options: bibliaOptions,
 		stripper: bibliaStripper
 	},
 	'amp': {
 		id: 'amp', // bibles.org
-		title : 'Amplified Bible',
-		copyright : 'All rights reserved. For Permission To Quote information visit http://www.lockman.org/',
-		description : 'The Amplified Bible (AMP) is an English translation of the Bible produced jointly by The Zondervan Corporation and The Lockman Foundation. The first edition was published in 1965. It is largely a revision of the American Standard Version of 1901, with reference made to various texts in the original languages. It is designed to "amplify" the text by using a system of punctuation and other typographical features to bring out all shades of meaning present in the original texts.',
+		title : L('amp_name'),
+		copyright : L('amp_copyright'),
+		description : L('amp_desc'),
 		url: 'https://bibles.org/%version/passages.js?q[]=%verse',
 		stripper: biblesOrgStripper,
 		auth: 'uuzkgv7VOFPg03SgRw3JaKfWQh8C2kynUlO1XLMm:X'
 	},
 	'cev': {
 		id: 'cev', // bibles.org
-		title : 'Contemporary English Version',
-		copyright : 'Copyright 2006, American Bible Society',
-		description : 'The Contemporary English Version or CEV (also known as Bible for Today\'s Family) is a translation of the Bible into English, published by the American Bible Society.',
+		title : L('cev_name'),
+		copyright : L('cev_copyright'),
+		description : L('cev_desc'),
 		url: 'https://bibles.org/%version/passages.js?q[]=%verse',
 		stripper: biblesOrgStripper,
 		auth: 'uuzkgv7VOFPg03SgRw3JaKfWQh8C2kynUlO1XLMm:X'
 	},
 	'darby': {
 		id: 'darby', // api.biblia.com
-		title : '1890 Darby Bible',
-		copyright : "Public Domain",
-		description : "As an ex-Anglican minister and the founder of the Plymouth Brethren, Darby's influence started the Niagara Conferences, which were the beginnings of prophetically-oriented Bible conferences in America. First published in 1890, this translation comes after Darby's understanding of the original languages matured during the writing of his French and German translations of the Bible.",
+		title : L('darby_name'),
+		copyright : L('darby_copyright'),
+		description : L('darby_desc'),
 		url: 'http://api.biblia.com/v1/bible/content/%version.txt.js',
 		options: bibliaOptions,
 		stripper: bibliaStripper
 	},
 	'emphbbl': {
 		id: 'emphbbl', // api.biblia.com
-		title : 'The Emphasized Bible',
-		copyright : "Public Domain",
-		description : "The Emphasized Bible, by Joseph Bryant Rotherham, is a unique translation which helps English-only Bible readers to understand the linguistic and literary nuances of the Greek and Hebrew texts. This translation aims for a literal rendering of the original languages, and adds markings to the English text to indicate emphases, parallel structures, and the other linguistic features. It also includes accent marks, brackets, indentations, and other markings within the text itself, to help communicate the features in Greek and Hebrew which are lost in translation.",
+		title : L('emphbbl_name'),
+		copyright : L('emphbbl_copyright'),
+		description : L('emphbbl_desc'),
 		url: 'http://api.biblia.com/v1/bible/content/%version.txt.js',
 		options: bibliaOptions,
 		stripper: bibliaStripper
 	},
 	'esv': {
 		id: 'esv', // www.esvapi.org
-		title : "English Standard Version",
-		copyright : "Copyright 2001 by Crossway, a publishing ministry of Good News Publishers.",
-		description : "The ESV Bible (English Standard Version) is an “essentially literal” translation of the Bible in contemporary English. The ESV Bible emphasizes “word-for-word” accuracy, literary excellence, and depth of meaning.",
+		title : L('esv_name'),
+		copyright : L('esv_copyright'),
+		description : L('esv_desc'),
 		url: 'http://www.esvapi.org/v2/rest/passageQuery',
 		options: esvOptions,
 		stripper: esvStripper
 	},
 	'gnt': {
 		id: 'gnt',	// bibles.org
-		title : 'Good News Translation',
-		copyright : 'Copyright 1992 by American Bible Society. Used by Permission.',
-		description : 'The Good News Bible (GNB), also called the Good News Translation (GNT), is an English language translation of the Bible by the American Bible Society, first published as the New Testament under the name Good News for Modern Man in 1966.',
+		title : L('gnt_name'),
+		copyright : L('gnt_copyright'),
+		description : L('gnt_desc'),
 		url: 'https://bibles.org/%version/passages.js?q[]=%verse',
 		stripper: biblesOrgStripper,
 		auth: 'uuzkgv7VOFPg03SgRw3JaKfWQh8C2kynUlO1XLMm:X'
 	},
 	'kjv': {
 		id: 'kjv',	// api.biblia.com
-		title : 'King James Version',
-		copyright : "Public Domain",
-		description : "Also known as the \"Authorized Version,\" The King James Version of the Bible is still the most widely used text in the English language. The Logos KJV includes the Strong's Numbers which allow English readers to identify and search for underlying Greek and Hebrew words in the original text.",
+		title : L('kjv_name'),
+		copyright : L('kjv_copyright'),
+		description : L('kjv_desc'),
 		url: 'http://api.biblia.com/v1/bible/content/%version.txt.js',
 		options: bibliaOptions,
 		stripper: bibliaStripper
 	},
 	'net': {
 		id: 'net', // labs.bible.org
-		title : 'The NET Bible',
-		copyright : "Copyright 1996-2006 by Biblical Studies Press, L.L.C.",
-		description : "The NET Bible is a completely new translation of the Bible with 60,932 translators’ notes! It was completed by more than 25 scholars – experts in the original biblical languages – who worked directly from the best currently available Hebrew, Aramaic, and Greek texts.",
+		title : L('net_name'),
+		copyright : L('net_copyright'),
+		description : L('net_desc'),
 		url: 'http://labs.bible.org/api/?',
 		options: netOptions,
 		stripper: netStripper
 	},
 	'nasb': {
 		id: 'nasb',	// bibles.org
-		title : 'New American Standard Bible',
-		copyright : 'New American Standard Bible (NASB) Copyright 1960, 1962, 1963, 1968, 1971, 1972, 1973, 1975, 1977, 1995 by The Lockman Foundation, La Habra, CA. All rights reserved. Used by Permission.',
-		description : 'The New American Standard Bible (NASB), also informally called the New American Standard Version (NASV), is an English translation of the Bible. The New Testament was first published in 1963. The complete Bible was published in 1971.',
+		title : L('nasb_name'),
+		copyright : L('nasb_copyright'),
+		description : L('nasb_desc'),
 		url: 'https://bibles.org/%version/passages.js?q[]=%verse',
 		stripper: biblesOrgStripper,
 		auth: 'uuzkgv7VOFPg03SgRw3JaKfWQh8C2kynUlO1XLMm:X'
 	},
 	'ylt': {
 		id: 'ylt',	// api.biblia.com
-		title : 'Young\'s Literal Translation',
-		copyright : "Public Domain",
-		description : "Robert Young is best known for his monumental work, Young's Analyte. Young's Literal Translation is a very good work to add to your Bible collection for text comparisons. Since this is a very literal translation, it offers a good contrast and comparison to a dynamic equivalent translatical Concordance To The Biblion like the NIV.",
+		title : L('ylt_name'),
+		copyright : L('ylt_copyright'),
+		description : L('ylt_desc'),
 		url: 'http://api.biblia.com/v1/bible/content/%version.txt.js',
 		options: bibliaOptions,
 		stripper: bibliaStripper
-	},
+	}
 };
 
 function findQuote(version, verse) {
@@ -192,8 +191,9 @@ function loadQuote(that) {
 	url = url.replace(/%verse/, escape(that.verse));
 	
 	var options = {};
-	if (typeof(bibles[that.version].options) == 'function')
+	if (typeof(bibles[that.version].options) == 'function') {
 		options = bibles[that.version].options(that.version, that.verse);
+	}
 	
 	that.quote = L('loading');
 
@@ -206,9 +206,10 @@ function loadQuote(that) {
 			// this.responseData holds any returned binary data
 			var passage = this.responseText;
 				
-			if (typeof(bibles[that.version].stripper) == 'function')
+			if (typeof(bibles[that.version].stripper) == 'function') {
 				passage = bibles[that.version].stripper(passage);			
-
+            }
+            
 			// Strip duplicate whitespace.
 			passage = passage.replace(/\s+/g, " ");
 			// Strip white space at beginning and end.
@@ -218,20 +219,22 @@ function loadQuote(that) {
 			if(passage != that.quote) {// Make sure it really has changed.
 				that.quote = passage;
 				cacheQuote(that.version, that.verse, that.quote);
-				if( typeof (that.changeCallback) == "function")
+				if( typeof (that.changeCallback) == "function") {
+                   // Notify the owner that the quote has changed.
 					that.changeCallback({
 						version : that.version,
 						verse : that.verse,
 						quote : that.quote
 					});
-				// Notify the owner that the quote has changed.
+				}
 			}
 		},
 		onerror : function(e) {
 			log.debug(e.error);
 			that.quote = L("no_quote");
-			if(typeof (that.errorCallback) == "function")
+			if(typeof (that.errorCallback) == "function") {
 				that.errorCallback(e.error, e.status);
+			}
 		},
 		timeout : 10000
 	});
@@ -242,7 +245,7 @@ function loadQuote(that) {
 		xhr.setRequestHeader('Authorization', authstr);
 	}
 	xhr.send(options);
-};
+}
 
 function validVersion(vn) {
 	return ( typeof (vn) == "string" && typeof (bibles[vn]) == "object");
@@ -267,12 +270,13 @@ function setVersionVerse(/*String*/vn, /*String*/vs) {
 	if(bChanged) {
 		this.quote = findQuote(this.version, this.verse);
 		if (typeof(this.quote) == "string") { // Found in cache.
-			if(typeof (this.changeCallback) == "function")
+			if(typeof (this.changeCallback) == "function") {
 				this.changeCallback({
 					version : this.version,
 					verse : this.verse,
 					quote : this.quote
 				});
+			}
 		} else {
 			loadQuote(this);
 		}
@@ -283,8 +287,9 @@ function setVersionVerse(/*String*/vn, /*String*/vs) {
 
 function lookupVersion(title) {
 	for(var i in bibles) {
-		if(bibles[i].title == title)
+		if(bibles[i].title == title) {
 			return i;
+		}
 	}
 
 	return 'unknown';

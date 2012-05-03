@@ -3,7 +3,7 @@ var log = require('helpers/logger');
 function NavigationController() {
 	log.start();
 	this.windowStack = [];
-};
+}
 
 function open(/*Ti.UI.Window*/windowToOpen) {
 	log.start();
@@ -21,7 +21,7 @@ function open(/*Ti.UI.Window*/windowToOpen) {
 
 	//This is the first window
 	if(this.windowStack.length === 1) {
-		if(Ti.Platform.osname === 'android') {
+		if(Ti.Platform.osname === 'android' || Ti.Platform.osname === 'mobileweb') {
 			windowToOpen.exitOnClose = true;
 			windowToOpen.open();
 		} else {

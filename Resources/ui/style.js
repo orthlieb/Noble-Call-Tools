@@ -1,94 +1,76 @@
+var _ = require('helpers/underscore');
+var log = require('helpers/logger');
+
 // Styles
-var fontFamily = {
-	serif : (Ti.Platform.osname == 'android') ? 'Serif' : 'Georgia',
-	sans : (Ti.Platform.osname == 'android') ? 'Sans' : 'Helvetica Neue',
-};
+if (Ti.Platform.osname == 'android') {
+	var fontFamily = {
+		serif : 'serif',
+		sans : 'sans-serif'
+	};
+} else {
+	var fontFamily = {
+		serif : 'Georgia',
+		sans : 'Calibri'
+	};
+}
 
 var styles = {
 	linen : {
-		// Colors
-		color : {
-			navBar : '#807759', // Putty
-			buttonHighlight : '#e5af31', // Gold
-			backgroundColor : '#f1e9cf', // Light tan
-			darkBackgroundColor : '#464031', // Dark brown
-			labelColor : '#fff', // White
-			pageControlColor : '#464031', // Dark brown
-			textColor : '#464031'				// Dark brown
-		},
-
-		opacity : {
-			translucentView: 0.1
-		},
+	    name : L('style_linen'),
+	    win: {
+            barColor: '#807759', // Putty	        
+            backgroundColor: '#f1e9cf' // Light tan           
+	    },
+        label: {
+            color : '#fff' // White      
+        },
+        button: {
+            selectedColor: '#e5af31' // Gold
+        },
+        translucentView: {
+            opacity: 0.1    
+        },
 
 		fontFamily: fontFamily,
-
 		font : {
 			tiny : {
 				fontSize : 8,
-				fontFamily : fontFamily.sans
+				fontFamily : fontFamily.serif
 			},
 			small : {
 				fontSize : 10,
-				fontFamily : fontFamily.sans
+				fontFamily : fontFamily.serif
 			},
 			medium : {
 				fontSize : 14,
-				fontFamily : fontFamily.sans
+				fontFamily : fontFamily.serif
 			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
 			large : {
 				fontSize : 16,
-				fontFamily : fontFamily.sans
+				fontFamily : fontFamily.serif
 			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
 			huge : {
 				fontSize : 18,
-				fontFamily : fontFamily.sans
+				fontFamily : fontFamily.serif
 			} //shadowColor:'black', shadowOffset:{x:0,y:1}
-		},
-
-		dim : {
-			statusBarHeight : 21,
-			navBarHeight : (Ti.Platform.osname == 'android') ? 0 : 44,
-			pagingControlHeight : 30,
-			gutter : 10,
-			textFieldHeight : 35
-		},
-
-		picker : {
-			height : 251,
-			top : 43
-		},
-
-		image : {
-			portrait : {
-				bibleQuote : 'images/linen/LinenPortrait.png',
-				courageousView : 'images/linen/LinenPortrait.png',
-				mainWindow : 'images/linen/LinenPortrait.png',
-				overlayDialog : 'images/linen/LinenPortrait.png',
-				webView : 'images/linen/LinenPortrait.png'
-			},
-			pillButton : 'images/linen/PillButton.png'
 		}
-	},
+    },
 	leather : {
-		// Colors
-		color : {
-			navBar : '#515151', // Gray
-			buttonHighlight : '#e5af31', // Gold
-			backgroundColor : '#D1D1D1', // Light gray
-			darkBackgroundColor : '#414141', // Dark brown
-			labelColor : '#fff', // White
-			pageControlColor : '#414141', // Dark brown
-			textColor : '#F0F0F0'				// Black
-		},
-
-		opacity : {
-			translucentView: 0.4
-		},
-
+	    name : L('style_leather'),
+        win: {
+            barColor: '#515151',        // Putty
+            backgroundColor: '#D1D1D1' // Light gray            
+        },
+        label: {
+            color : '#fff' // White      
+        },
+        button: {
+            selectedColor: '#e5af31' // Gold
+        },
+        translucentView: {
+            opacity: 0.4    
+        },
 		fontFamily: fontFamily,
-
-
 		font : {
 			tiny : {
 				fontSize : 8,
@@ -110,53 +92,73 @@ var styles = {
 				fontSize : 18,
 				fontFamily : fontFamily.sans
 			} //shadowColor:'black', shadowOffset:{x:0,y:1}
-		},
-
-		dim : {
-			statusBarHeight : 21,
-			navBarHeight : (Ti.Platform.osname == 'android') ? 0 : 43,
-			pagingControlHeight : 30,
-			gutter : 10,
-			textFieldHeight : 35
-		},
-
-		picker : {
-			height : 251,
-			top : 43
-		},
-
-		image : {
-			portrait : {
-				bibleQuote : 'images/leather/LeatherPortrait.png',
-				courageousView : 'images/leather/LeatherPortrait.png',
-				mainWindow : 'images/leather/LeatherPortrait.png',
-				overlayDialog : 'images/leather/LeatherPortrait.png',
-				webView : 'images/leather/LeatherPortrait.png'
-			},
-			pillButton : 'images/leather/PillButton.png'
 		}
 	}
 };
+
+function StyleSet(id) {
+    for (var i in styles[id]) {
+        if (styles[id].hasOwnProperty(i)) {
+            this[i] = styles[id][i];
+        }
+    }
+    
+    this.style = id;
+    Ti.App.Properties.setString('style', id);
+}
+
+function StyleLookup(/*TiUIString*/name) {
+    // Maps a style name to a style id
+    for(var i in styles) {
+        if(styles[i].name == name) {
+            return i;
+        }
+    }
+    return 'unknown';    
+}
+
+function StyleFindImage(/*string*/name) {
+    // Finds the requested image, starting with the least specific to the most specific
+    // file.orientation.osname.ext
+    // That is, it searches for name.ext first, then name.orientation.ext, then name.orientation.osname.ext
+    // Returns the file name
+    var width = Ti.Platform.displayCaps.platformWidth;
+    var height = Ti.Platform.displayCaps.platformHeight;
+    var orientation = width > height ? 'landscape' : 'portrait';
+    var osname = Ti.Platform.osname;
+    var file = name.split('.');
+
+    log.info('Looking for ' + Ti.Filesystem.resourcesDirectory + 'images/' + file[0] + '.' + file[1]);
+    var theFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'images', file[0] + '.' + file[1]);
+    if (theFile.exists()) {
+        return theFile.nativePath;
+    }
+    log.info('Looking for ' + Ti.Filesystem.resourcesDirectory + 'images/' + this.style + '/' + file[0] + '.' + file[1]);
+    theFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'images', this.style, file[0] + '.' + file[1]);
+    if (theFile.exists()) {
+        return theFile.nativePath;
+    }
+    log.info('Looking for ' + Ti.Filesystem.resourcesDirectory + 'images/' + this.style + '/' + file[0] + '.' + orientation + '.' + file[1]);
+    theFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'images', this.style, file[0] + '.' + orientation + '.' + file[1]);
+    if (theFile.exists()) {
+        return theFile.nativePath;
+    }
+    
+    log.info('Looking for ' + Ti.Filesystem.resourcesDirectory + 'images/' + this.style + '/' + file[0] + '.' + orientation + '.' + osname + '.' + file[1]);
+    theFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory, 'images', this.style, file[0] + '.' + orientation + '.' + osname + '.' + file[1]);
+    if (theFile.exists()) {
+        return theFile.nativePath;
+    }
+}
 
 var style = {
-	init : function () {
-		Ti.Gesture.addEventListener("orientationchange", function styleOrientationChange(e) {
-			style.dim.navBarHeight = (e.orientation == Ti.UI.LANDSCAPE_LEFT || e.orientation == Ti.UI.LANDSCAPE_RIGHT) ? 32 : 44;
-		});		
-	},
-	set : function(id) {
-		this.name = id;
-		this.color = styles[id].color;
-		this.fontFamily = styles[id].fontFamily;
-		this.font = styles[id].font;
-		this.dim = styles[id].dim;
-		this.picker = styles[id].picker;
-		this.image = styles[id].image;
-		this.opacity = styles[id].opacity;
-	}
+    set: StyleSet,
+    findImage: StyleFindImage,
+    lookup: StyleLookup,
+	styles: styles
 };
+_.bindAll(style);
 
-style.init();
-style.set(Ti.App.Properties.getString("style", "leather"));
+style.set("leather");//Ti.App.Properties.getString("style", "linen"));
 
 module.exports = style;

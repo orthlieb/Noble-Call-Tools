@@ -1,203 +1,177 @@
 var BibleModel = require('model/BibleModel');
-var ui = require('ui');
+var ui = require('ui/ui');
 var style = require('ui/style');
 var log = require('helpers/logger');
 var ComboBox = require('widgets/ComboBox');
 var OverlayDialog = require('widgets/OverlayDialog');
-var utils = require('helpers/utils');
-
-// Gets all the applicable sizes based on the current size of the screen, used for initial layout and handling rotation
-function getLayout(/*TiUIWindow*/parentWindow, /*boolean*/creation) {	
-	var top = style.dim.gutter;
-	var left = style.dim.gutter;
-	var bottom = parentWindow.height - style.dim.gutter - (creation ? style.dim.navBarHeight : 0); // Work around a bug in Ti
-	var width = parentWindow.width - style.dim.gutter * 2;
-	
-	var layout = {};
-	
-	layout.comboBox = {
-		left: left,
-		top: top,
-		width: width,
-		height: style.dim.textFieldHeight,
-	};
-	
-	top += layout.comboBox.height + style.dim.gutter;	
-	
-	layout.copyrightLabel = {
-		left: left,
-		top: bottom - style.font.tiny.fontSize - 3,
-		width: width,
-		height: style.font.tiny.fontSize + 3,
-	};
-
-	bottom = layout.copyrightLabel.top - style.dim.gutter;
-	
-	layout.translucentView = {
-		left: left,
-		top: top,
-		width: width,
-		height: bottom - top,
-	};
-	
-	layout.scrollView = {
-		left: left,
-		top: top,
-		width: width,
-		height: bottom - top,
-		contentWidth: width,
-	};
-
-	layout.textArea = {
-		top: 0,
-		left: 0,
-		width: width
-	};
-	
-	return layout;
-}
-
-// Standard relayout call.
-function relayout() {
-	var self = this;
-	var layout = getLayout(self.win, false);
-	
-	for (var i in layout) {
-		for (var j in layout[i]) {
-			self[i][j] = layout[i][j];
-		}
-	}
-}
 
 function BibleQuote(/*string*/version, /*string*/verse) {
 	var self = this;
-	
-	// Go get the quote.
+
+    // Go get the quote.
 	var changeCallback = function(data) {
-		if (self.textArea)
+		if (self.textArea) {
 			self.textArea.value = data.quote;
-		if (self.copyrightLabel)
+		}
+		if (self.copyrightLabel) {
 			self.copyrightLabel.text = self.bm.bibles[data.version].copyright;
+			self.copyrightLabel.height = Ti.UI.SIZE;     // Resize the area in case it grows or shrinks
+		}
 		
 		Titanium.App.Properties.setString('BibleVersion', data.version);	// Make it sticky.
 	};
+	
 	var errorCallback = function(textStatus, errorThrown) {
-		if (self.textArea)
+		if (self.textArea) {
 			self.textArea.value = 'Error ' + errorThrown + ': ' + textStatus;
+		}
 	};
 
 	self.bm = new BibleModel(version, verse, changeCallback, errorCallback);
-};
+}
 
-function open(controller) {
+function BibleQuoteOpen(controller) {
 	var self = this;
 	
 	log.start();
 
-	self.win = ui.window({
+	var win = ui.window({
 		backButtonTitle: L('button_done'),
-		backgroundImage: style.image.portrait.bibleQuote,
-		barColor: style.color.navBar,
-		orientationModes: [ Ti.UI.PORTRAIT ],
-		title: self.bm.verse
-	});
-	
-	var infoButton = ui.button({
-	    id: 'info',
-		systemButton:Titanium.UI.iPhone.SystemButton.INFO_LIGHT	    
-	});
-	self.win.rightNavButton = infoButton;
-	infoButton.addEventListener('click',function() {
-		var od = new OverlayDialog({
-			title: self.bm.bibles[self.bm.version].title,
-			backgroundColor: style.color.backgroundColor,
-			backgroundImage: style.image.portrait.overlayDialog,
-			barColor: style.color.navBar,
-		});
-		od.open(self.bm.bibles[self.bm.version].description);
+		backgroundImage: style.findImage('Background.png'),
+		barColor: style.win.barColor,
+		title: self.bm.verse,
+		layout: 'absolute'
 	});
 
-	var layout = getLayout(self.win, true);
-	
-	self.comboBox = new ComboBox(self.win, utils.merge(layout.comboBox, {
+    function BibleQuoteInfo() {
+        var od = new OverlayDialog({
+            title : self.bm.bibles[self.bm.version].title,
+            backgroundColor : style.win.backgroundColor,
+            backgroundImage : style.findImage('Background.png'),
+            barColor : style.win.barColor
+        });
+        od.open(self.bm.bibles[self.bm.version].description);
+    }
+
+    switch (Ti.Platform.osname) {
+        case 'iphone':
+        case 'ipad':
+            // Info button for the selected bible.
+            var infoButton = ui.button({
+                id: 'info',
+                systemButton:Ti.UI.iPhone.SystemButton.INFO_LIGHT       
+            });
+            win.rightNavButton = infoButton;
+            infoButton.addEventListener('click', BibleQuoteInfo);
+        break;
+        case 'android':
+            win.activity.onCreateOptionsMenu = function(e) {
+                var menu = e.menu;
+                var menuItem = menu.add({
+                    title : L('info'),
+                    itemId : 0
+                });
+                menuItem.setIcon(style.findImage('info'));
+                menuItem.addEventListener('click', BibleQuoteInfo);
+            };    
+        break;
+        default:
+            // XXX Add Blackberry, Windows, Mobile Web
+            log.assert(false, "Unsupported platform");
+        break;
+    }        
+
+    // List of bibles to choose from.
+    var comboBox = new ComboBox(win, {
+        left: ui.dim.gutter,
+        top: ui.dim.gutter,
+        right: ui.dim.gutter,
+        height: Ti.UI.SIZE,
 		borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		editable: false,
-		value: self.bm.bibles[self.bm.version].title,
-	}));		
-	self.win.add(self.comboBox);
-	self.comboBox.addEventListener('change', function(e) { 
+		value: self.bm.bibles[self.bm.version].title
+	});		
+	win.add(comboBox);
+	comboBox.addEventListener('change', function(e) { 
 		self.bm.setVersionVerse(self.bm.lookupVersion(e.value), self.bm.verse);
 	});
+    // Load the picker with data, figure out which one is selected. 
+    var selected = 0;
+    var count = 0;
+    var data = [];
+    for (var i in self.bm.bibles) {
+        if (self.bm.bibles.hasOwnProperty(i)) {
+            var pickerRow = Titanium.UI.createPickerRow({
+                id: i,
+                title: self.bm.bibles[i].title
+            });
+            if (self.bm.version == i) {
+                selected=count;
+            }
+            count++;
+            data.push(pickerRow);
+        }
+    }
+    comboBox.picker.add(data);
+    comboBox.picker.setSelectedRow(0, selected);
 
-	self.copyrightLabel = Titanium.UI.createLabel(utils.merge(layout.copyrightLabel, {
-		backgroundColor: 'transparent',
-		font: style.font.tiny,
-		textAlign: 'center',
-		text: self.bm.bibles[self.bm.version].copyright
-	}));
-	self.win.add(self.copyrightLabel);
-	
-	// Load the picker with data, figure out which one is selected.	
-	var selected = 0;
-	var count = 0;
-	var data = [];
-	for (var i in self.bm.bibles) {
-		var pickerRow = Titanium.UI.createPickerRow({
-			id: i,
-			title: self.bm.bibles[i].title
-		});
-		if (self.bm.version == i)
-			selected=count;
-		count++;
-		data.push(pickerRow);
-	}
-	self.comboBox.picker.add(data);
-	self.comboBox.picker.setSelectedRow(0, selected);
-	
-	// Nice opaque effect in the background.
-	self.translucentView = Titanium.UI.createView(utils.merge(layout.translucentView, {
-		borderRadius: 5,
-		borderWidth: 1,
-		backgroundColor: style.color.backgroundColor,
-		opacity: style.opacity.translucentView	
-	}));
-	self.win.add(self.translucentView);
+    // Nice opaque effect in the background.
+    var translucentView = Titanium.UI.createView({
+        left: ui.dim.gutter,
+        top: ui.dim.gutter,
+        right: ui.dim.gutter,
+        bottom: ui.dim.gutter,
+        borderRadius: 5,
+        borderWidth: 1,
+        backgroundColor: style.win.backgroundColor,
+        opacity: style.translucentView.opacity  
+    });
+    win.add(translucentView);
 
-	self.scrollView = Ti.UI.createScrollView(utils.merge(layout.scrollView, {
-		contentHeight: 'auto',	
-		backgroundColor: 'transparent'
-	}));
-	self.win.add(self.scrollView);
-	
-	self.textArea = Titanium.UI.createTextArea(utils.merge(layout.textArea, {
+	self.textArea = Titanium.UI.createTextArea({
+        left: ui.dim.gutter,
+        top: ui.dim.gutter,
+        right: ui.dim.gutter,
+        bottom: ui.dim.gutter,
 		editable: false,
 		font: style.font.huge,
 		value: self.bm.quote,
 		backgroundColor: 'transparent'
-	}));
-	self.scrollView.add(self.textArea);
-
-	// Handle orientation.	
-	function relayoutBibleQuote(e) {
-		var deviceLandscape = (Ti.Platform.displayCaps.platformWidth > Ti.Platform.displayCaps.platformHeight);
-		var windowLandscape = (self.win.width > self.win.height);
-		if (deviceLandscape != windowLandscape) {
-			// TIBUG: When we are not the top window, we get the orientation gesture but our window has not been automatically rotated for us.
-			// We detect this by realizing that the window's orientation and the device orientation are not in line and reset.
-			self.win.width = Ti.Platform.displayCaps.platformWidth;
-			self.win.height = Ti.Platform.displayCaps.platformHeight - style.dim.navBarHeight - style.dim.statusBarHeight;
-		}
-
-		self.relayout();
-	}
-	self.win.addEventListener("close", function bibleQuoteClose(e) {
-		Ti.Gesture.removeEventListener("orientationchange", relayoutBibleQuote);
 	});
-	Ti.Gesture.addEventListener("orientationchange", relayoutBibleQuote);
+	win.add(self.textArea);
 
-	controller.open(self.win);	// Add to the Nav controller.
-};
+    self.copyrightLabel = Titanium.UI.createLabel({
+        left: ui.dim.gutter,
+        right: ui.dim.gutter,
+        bottom: ui.dim.gutter,
+        height: Ti.UI.SIZE,
+        backgroundColor: 'transparent',
+        font: style.font.tiny,
+        textAlign: 'center',
+        color: style.label.color,
+        text: self.bm.bibles[self.bm.version].copyright
+    });
+    win.add(self.copyrightLabel);
+    
+    win.addEventListener('postlayout', function (e) {
+        // Only want to relay out if our dependent items change
+        if (e.source == comboBox || e.source == self.copyrightLabel) {
+            var top = comboBox.size.height + ui.dim.gutter * 2;
+            var bottom = self.copyrightLabel.size.height + ui.dim.gutter * 2;
+            self.textArea.updateLayout({
+                top: top,
+                bottom: bottom  
+            });
+            translucentView.updateLayout({
+                top: top,
+                bottom: bottom
+            });
+            log.info('Resizing top/bottom ' + translucentView.top + '/' + translucentView.bottom);
+        }
+    });
+   
+	controller.open(win);	// Add to the Nav controller.
+}
 
-BibleQuote.prototype.open = open;
-BibleQuote.prototype.relayout = relayout;
+BibleQuote.prototype.open = BibleQuoteOpen;
 module.exports = BibleQuote;

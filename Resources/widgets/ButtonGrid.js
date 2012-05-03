@@ -8,67 +8,81 @@
 //                              image: image to display (should be in images/<image>Normal.png and images/<image>Selected.png)
 //                              offset: offset in pixels from the bottom of the button for the label (useful for adjusting 1 vs 2 line labels)
 //                          } ]
-// @dimButtons		array	Array of w, h for the button image
-// @click			function 	Function to call when the button is clicked.
+// @dimButtons		array       Array of w, h for the button image
+// @click           function    Function to call when the button is clicked.
 // returns: button grid object
 
 var log = require('helpers/logger');
 var style = require('ui/style');
-var utils = require('helpers/utils');
+var ui = require('ui/ui');
 
 function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 	log.start();
 
 	this.click = click;
-    this.buttons = new Array();
+    this.buttons = [];
     this.dimButton = dimButtons;
     
     this.scrollview = Ti.UI.createScrollView({
-		contentWidth: Ti.Platform.displayCaps.platformWidth,
+		contentWidth: Ti.UI.FILL,
 		contentHeight:'auto',
-		top: 0,
-		left: 0,
-		height: Ti.Platform.displayCaps.platformHeight,// - style.dim.statusBarHeight, // xxx
+		left: 0, top: 0, right: 0, bottom: 0,
 		showVerticalScrollIndicator: true
     });
-   
    
     var j = 0;
     for (var i in buttons) {
 		if (buttons.hasOwnProperty(i)) {
 		    log.info('Creating button ' + i);
-		    var button = Ti.UI.createButton({
+		    
+		    var buttonProps = {
+		       left: 100, top: 100,    
 		       id: i,
-		       backgroundImage: utils.resourceDir('image') + style.name + '/' + buttons[i].image + 'Normal.png',
-		       backgroundSelectedImage: utils.resourceDir('image') + style.name + '/' + buttons[i].image + 'Selected.png',
+		       backgroundImage: style.findImage(buttons[i].image + 'Normal.png'),
+		       backgroundSelectedImage: style.findImage(buttons[i].image + 'Selected.png'),
 		       width: this.dimButton.w,
 		       height: this.dimButton.h
-		    });
-			this.buttons[j] = button;
-		   
-		    if (this.click != null) {
-				this.buttons[j].addEventListener('click', this.click);
+		    };
+		    
+		    if (Ti.Platform.osname == "android") {
+                // TIBUG: On Android we can add a label to a button and align it to the bottom. The vertical align doesn't work on iOS.
+                buttonProps.title = buttons[i].text + '\n';
+                buttonProps.textAlign = Ti.UI.TEXT_ALIGNMENT_CENTER;
+				buttonProps.verticalAlign = Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM;
+				buttonProps.font = style.font.small;
+				buttonProps.color = style.label.color;
+                buttonProps.selectedColor = style.button.selectedColor;
 		    }
 		    
-		    var theLabel = Ti.UI.createLabel({
-				color: style.color.labelColor,
-				highlightedColor: style.color.buttonHighlight,
-				backgroundColor: 'transparent',
-				width: this.dimButton.w,
-				height:'auto',
-				bottom: buttons[i].offset,
-				font: style.font.small,
-				text: buttons[i].text,
-				textAlign: 'center',
-				touchEnabled: false
-		    });
-		
-		    this.buttons[j].add(theLabel);
-		    this.scrollview.add(this.buttons[j++]);
+		    var button = Ti.UI.createButton(buttonProps);
+			this.buttons[j] = button;		   
+            if (typeof(this.click) != "undefined") {
+				this.buttons[j].addEventListener('click', this.click);
+		    }
+		    this.scrollview.add(this.buttons[j]);
+		    
+		    if (Ti.Platform.osname != 'android') {
+                // TIBUG: On iOS we need to place the text label into the button proper. Comes up blank on Android.
+			    var theLabel = Ti.UI.createLabel({
+					color: style.label.color,
+					backgroundColor: 'transparent',
+					width: this.dimButton.w,
+					height:Ti.UI.SIZE,
+					bottom: buttons[i].offset,
+					font: style.font.small,
+					text: buttons[i].text,
+					textAlign: 'center',
+					touchEnabled: false
+			    });
+			
+			    this.buttons[j].add(theLabel);
+			}
+			
+			j++;
 		}
     }
     log.info('ButtonGrid: total of ' + this.buttons.length + ' buttons in this grid');
-};
+}
 
 function relayout(viewWidth) {
 	// Should be called after instantiation first time to display the button grid and
@@ -84,7 +98,7 @@ function relayout(viewWidth) {
     var gutter = (viewWidth - (numButtonsAcross * this.dimButton.w)) / (numButtonsAcross + 1);
     log.info('ButtonGrid: Layout gutter = ' + gutter + ', laying out ' + this.buttons.length + ' buttons ' + numButtonsAcross + ' across.');
 
-    var layoutCursor = { x: gutter, y: gutter / 2 };
+    var layoutCursor = { x: gutter, y: gutter };
 	for (var i = 0; i < this.buttons.length; i++) {
 	    this.buttons[i].animate({
 			left: layoutCursor.x,
@@ -101,7 +115,7 @@ function relayout(viewWidth) {
 			layoutCursor.y += this.dimButton.h + gutter;
 	    }
 	}
-};
+}
 
 ButtonGrid.prototype.relayout = relayout;
 module.exports = ButtonGrid;

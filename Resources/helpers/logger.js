@@ -1,4 +1,4 @@
-exports.logLevel = 3; 
+exports.logLevel = 3;
     // Set to -1 to suppress all messages.
     // Set to 0 to log only errors.
     // Set to 1 to log warnings and errors
@@ -7,13 +7,12 @@ exports.logLevel = 3;
     // Set to 0 for production, which will log only errors.
     
 function getTime() {
-   	var date = new Date();
+    var date = new Date();
 	return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 }
 
 // function getName() {
 	// var funcName = '';
-// 	
     // if (arguments.callee.caller !== null) {
         // funcName = arguments.callee.caller.name;
         // if (funcName.length > 0){
@@ -62,3 +61,17 @@ exports.error = function(message) {
 		Ti.API.error(getTime() + " " + arguments.callee.caller.name + ": " + message);
 	}
 };
+
+function AssertException(message) { 
+    this.message = message; 
+}
+
+AssertException.prototype.toString = function () {
+    return "AssertException " + getTime() + " " + arguments.callee.caller.name + ": " + this.message;
+};
+
+exports.assert = function(exp, message) {
+    if (!exp) {
+        throw new AssertException(message);
+    }
+}

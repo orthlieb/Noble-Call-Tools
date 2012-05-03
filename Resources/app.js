@@ -2,7 +2,7 @@
 // === Main Application
 //
 
-var version = "1.1";
+var version = "1.1.1";
 
 //
 // === Load dependent class files
