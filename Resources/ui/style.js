@@ -1,20 +1,45 @@
-var _ = require('helpers/underscore');
-var log = require('helpers/logger');
+var _ = require('lib/underscore');
+var log = require('lib/logger');
 
 // Styles
-if (Ti.Platform.osname == 'android') {
-	var fontFamily = {
-		serif : 'serif',
-		sans : 'sans-serif'
-	};
-} else {
-	var fontFamily = {
-		serif : 'Georgia',
-		sans : 'Calibri'
-	};
+var fontFamily = {};
+switch (Ti.Platform.osname) {
+    case 'iphone':
+    case 'ipad':
+        fontFamily.serif = 'Georgia';
+        fontFamily.sans = 'Calibri';
+        break;
+    case 'android':
+        fontFamily.serif = 'serif';
+        fontFamily.sans = 'sans-serif';
+        break;
+    case 'mobileweb':
+        fontFamily.serif = 'Georgia';
+        fontFamily.sans = 'Calibri';
+        break;
+    default:
+        log.assert(false, "Cross Platform code not implemented.");
+        break;
 }
 
+var tbHeight = (Ti.Platform.osname == 'android') ? 40 : 35;
+
 var styles = {
+    d: {
+        gutter: {
+            size : 10
+        },
+        pagingControl: {
+            height: 30
+        },
+        picker: {
+            height: 215  
+        },
+        textField: {
+            height: tbHeight,
+            color: 'black'
+        }
+    },
 	linen : {
 	    name : L('style_linen'),
 	    win: {
@@ -25,13 +50,12 @@ var styles = {
             color : '#fff' // White      
         },
         button: {
+            height: tbHeight,
             selectedColor: '#e5af31' // Gold
         },
-        translucentView: {
+         translucentView: {
             opacity: 0.1    
         },
-
-		fontFamily: fontFamily,
 		font : {
 			tiny : {
 				fontSize : 8,
@@ -44,15 +68,15 @@ var styles = {
 			medium : {
 				fontSize : 14,
 				fontFamily : fontFamily.serif
-			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
+			}, 
 			large : {
 				fontSize : 16,
 				fontFamily : fontFamily.serif
-			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
+			}, 
 			huge : {
 				fontSize : 18,
 				fontFamily : fontFamily.serif
-			} //shadowColor:'black', shadowOffset:{x:0,y:1}
+			} 
 		}
     },
 	leather : {
@@ -65,10 +89,11 @@ var styles = {
             color : '#fff' // White      
         },
         button: {
+            height: tbHeight,
             selectedColor: '#e5af31' // Gold
         },
         translucentView: {
-            opacity: 0.4    
+            opacity: 0.6    
         },
 		fontFamily: fontFamily,
 		font : {
@@ -83,25 +108,22 @@ var styles = {
 			medium : {
 				fontSize : 14,
 				fontFamily : fontFamily.sans
-			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
+			}, 
 			large : {
 				fontSize : 16,
 				fontFamily : fontFamily.sans
-			}, //shadowColor:'black', shadowOffset:{x:0,y:1}
+			}, 
 			huge : {
 				fontSize : 18,
 				fontFamily : fontFamily.sans
-			} //shadowColor:'black', shadowOffset:{x:0,y:1}
+			} 
 		}
 	}
 };
 
 function StyleSet(id) {
-    for (var i in styles[id]) {
-        if (styles[id].hasOwnProperty(i)) {
-            this[i] = styles[id][i];
-        }
-    }
+    _.extend(this, styles.d);   // Defaults
+    _.extend(this, styles[id]); // Actual style values
     
     this.style = id;
     Ti.App.Properties.setString('style', id);

@@ -1,4 +1,3 @@
-//
 // === Button Grid View
 // A grid of buttons in a scroll view.
 // @viewWidth		integer	Width of the view (height is 'auto')
@@ -8,13 +7,13 @@
 //                              image: image to display (should be in images/<image>Normal.png and images/<image>Selected.png)
 //                              offset: offset in pixels from the bottom of the button for the label (useful for adjusting 1 vs 2 line labels)
 //                          } ]
-// @dimButtons		array       Array of w, h for the button image
-// @click           function    Function to call when the button is clicked.
+// @dimButtons		array       Array of w, h that defines the dimensions of the button image
+// XXX Might want to change this to be just the number of buttons to have across and a gutter?
+// @click           function    Function to call when a button is clicked.
 // returns: button grid object
 
-var log = require('helpers/logger');
+var log = require('lib/logger');
 var style = require('ui/style');
-var ui = require('ui/ui');
 
 function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 	log.start();
@@ -36,7 +35,7 @@ function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 		    log.info('Creating button ' + i);
 		    
 		    var buttonProps = {
-		       left: 100, top: 100,    
+		       center: { x: '50%', y: '50%' },    
 		       id: i,
 		       backgroundImage: style.findImage(buttons[i].image + 'Normal.png'),
 		       backgroundSelectedImage: style.findImage(buttons[i].image + 'Selected.png'),
@@ -44,9 +43,9 @@ function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 		       height: this.dimButton.h
 		    };
 		    
-		    if (Ti.Platform.osname == "android") {
+		    if (Ti.Platform.osname == "android"|| Ti.Platform.osname == "mobileweb") {
                 // TIBUG: On Android we can add a label to a button and align it to the bottom. The vertical align doesn't work on iOS.
-                buttonProps.title = buttons[i].text + '\n';
+                buttonProps.title = buttons[i].text;
                 buttonProps.textAlign = Ti.UI.TEXT_ALIGNMENT_CENTER;
 				buttonProps.verticalAlign = Ti.UI.TEXT_VERTICAL_ALIGNMENT_BOTTOM;
 				buttonProps.font = style.font.small;
@@ -61,23 +60,23 @@ function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 		    }
 		    this.scrollview.add(this.buttons[j]);
 		    
-		    if (Ti.Platform.osname != 'android') {
-                // TIBUG: On iOS we need to place the text label into the button proper. Comes up blank on Android.
-			    var theLabel = Ti.UI.createLabel({
-					color: style.label.color,
-					backgroundColor: 'transparent',
-					width: this.dimButton.w,
-					height:Ti.UI.SIZE,
-					bottom: buttons[i].offset,
-					font: style.font.small,
-					text: buttons[i].text,
-					textAlign: 'center',
-					touchEnabled: false
-			    });
-			
-			    this.buttons[j].add(theLabel);
-			}
-			
+		    if (Ti.Platform.osname == "iphone" || Ti.Platform.osname == "ipad" ) {
+                // TIBUG: On iOS we need to place the text label into the button proper. 
+                var theLabel = Ti.UI.createLabel({
+                    color: style.label.color,
+                    backgroundColor: 'transparent',
+                    width: this.dimButton.w,
+                    height:Ti.UI.SIZE,
+                    bottom: buttons[i].offset,
+                    font: style.font.small,
+                    text: buttons[i].text,
+                    textAlign: 'center',
+                    touchEnabled: false
+                });
+                
+                this.buttons[j].add(theLabel);					
+            }
+
 			j++;
 		}
     }

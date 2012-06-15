@@ -1,5 +1,4 @@
-var log = require('helpers/logger');
-var ui = require('ui/ui');
+var log = require('lib/logger');
 var style = require('ui/style');
 
 function SettingsPanel() {
@@ -10,7 +9,7 @@ function open(controller) {
     log.start();
     var self = this;
 
-    var win = ui.window({
+    var win = Ti.UI.createWindow({
         backButtonTitle: L('button_done'),
         backgroundImage: style.findImage('Background.png'),
         barColor: style.win.barColor,
@@ -35,13 +34,13 @@ function open(controller) {
     one.add(headerImage);
  
     // Version
-    var versionLabel = ui.label({
-        right: ui.dim.gutter,
-        bottom: ui.dim.gutter,
+    var versionLabel = Ti.UI.createLabel({
+        right: style.gutter.size,
+        bottom: style.gutter.size,
         width: Ti.UI.FILL,
         height: Ti.UI.SIZE,
         font: style.font.small,
-        text: L('version_group') + version,
+        text: L('version_group') + L('version_number'),
         textAlign: Ti.UI.TEXT_ALIGNMENT_RIGHT,
         color: style.label.color
     });
@@ -59,11 +58,11 @@ function open(controller) {
     });
 
      // Nice opaque effect in the background.
-    var translucentView = ui.view({
-        left: ui.dim.gutter,
-        top: ui.dim.gutter,
-        right: ui.dim.gutter,
-        bottom: ui.dim.gutter,
+    var translucentView = Ti.UI.createView({
+        left: style.gutter.size,
+        top: style.gutter.size,
+        right: style.gutter.size,
+        bottom: style.gutter.size,
         borderRadius: 5,
         borderWidth: 1,
         backgroundColor: style.win.backgroundColor,
@@ -72,17 +71,17 @@ function open(controller) {
     two.add(translucentView); 
     
     var three = Ti.UI.createView({
-        left: ui.dim.gutter * 2,
-        top: ui.dim.gutter * 2,
-        right: ui.dim.gutter * 2,
-        bottom: ui.dim.gutter * 2,
+        left: style.gutter.size * 2,
+        top: style.gutter.size * 2,
+        right: style.gutter.size * 2,
+        bottom: style.gutter.size * 2,
         layout: 'vertical'
     });
     
     // Paragraph describing Noble Call
     var variation = style.font.small;
     variation.fontStyle = 'italic';
-    var creedText = ui.label({
+    var creedText = Ti.UI.createLabel({
         left: 0,
         top: 0,
         right: 0,
@@ -101,8 +100,8 @@ function open(controller) {
         emailDialog.messageBody = L('email_body');
         emailDialog.open();
     }
-    var emailButton = ui.button({
-        top: ui.dim.gutter,
+    var emailButton = Ti.UI.createButton({
+        top: style.gutter.size,
         center: { x: '50%' },
         width: Ti.UI.SIZE,
         height: Ti.UI.SIZE,

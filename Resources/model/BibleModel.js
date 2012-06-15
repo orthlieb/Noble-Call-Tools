@@ -1,5 +1,5 @@
-var log = require('helpers/logger');
-var XMLTools = require('helpers/XMLTools');
+var log = require('lib/logger');
+var XMLTools = require('lib/XMLTools');
 
 // The bibles.org API returns a CDATA encapsulated string with superscripts and spans
 function biblesOrgStripper(phrase) {

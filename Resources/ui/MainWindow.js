@@ -4,8 +4,7 @@ var WebView = require('widgets/WebView');
 var ButtonGrid = require('widgets/ButtonGrid');
 var BibleQuote = require('ui/BibleQuote');
 
-var log = require('helpers/logger');
-var ui = require('ui/ui');
+var log = require('lib/logger');
 var style = require('ui/style');
 
 function MainWindow() {
@@ -185,7 +184,7 @@ function mainButtonGridClick(e) {
 
     log.info(theButton.id + ' button pressed (' + e + ')');
 
-    Titanium.Analytics.featureEvent('com.noblecall.toolset.' + theButton.id);
+    Ti.Analytics.featureEvent('com.noblecall.toolset.' + theButton.id);
 
     switch (theButton.id) {
         case 'armor':
@@ -202,7 +201,7 @@ function mainButtonGridClick(e) {
                 w : 85,
                 h : 117.5
             }, courageousButtonClick);
-            var win = ui.window({// Need a window to host the grid.
+            var win = Ti.UI.createWindow({// Need a window to host the grid.
                 backButtonTitle : L('button_done'),
                 backgroundColor : style.win.backgroundColor,
                 backgroundImage : style.findImage('Background.png'),
@@ -256,7 +255,7 @@ function open() {
     log.start();
 
     // Construct the main window and navigation controller.
-    var w = ui.window({
+    var w = Ti.UI.createWindow({
         title : L('app_title'),
         backgroundColor : style.win.backgroundColor,
         backgroundImage : style.findImage('Background.png')
@@ -268,33 +267,11 @@ function open() {
     function mainSettingsButtonClick(e) {
         mainSettingsPanel.open(navController);
     }
-    switch (Ti.Platform.osname) {
-        case 'iphone':
-        case 'ipad':
-            // Info button for the selected bible.
-            var infoButton = ui.button({
-                id: 'info',
-                systemButton:Ti.UI.iPhone.SystemButton.INFO_LIGHT       
-            }, mainSettingsButtonClick);
-            w.rightNavButton = infoButton;
-        break;
-        case 'android':
-            w.activity.onCreateOptionsMenu = function(e) {
-                var menu = e.menu;
-                var menuItem = menu.add({
-                    title : L('info'),
-                    itemId : 0
-                });
-                menuItem.setIcon(style.findImage('info'));
-                menuItem.addEventListener('click', mainSettingsButtonClick);
-            };    
-        break;
-        default:
-            // XXX Add Blackberry, Windows, Mobile Web
-            log.assert(false, "Unsupported platform");
-        break;
-    }  
     
+    var InfoButton = require('widgets/InfoButton');
+    var infoButton = new InfoButton();
+    infoButton.attach(w, mainSettingsButtonClick);
+   
     var mainButtonGrid = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, mainButtons, {
         w : 85,
         h : 117.5

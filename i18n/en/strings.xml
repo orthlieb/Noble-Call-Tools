@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
+	<string name="version_number">1.1.2</string>
 	<string name="app_title">Noble Call Tools</string>
 	<string name="armor_of_god">Armor</string>
 	<string name="a_great_response">Comforting Conversation</string>
@@ -36,9 +37,9 @@
 	<string name="style_leather">Leather</string>
 	<string name="settings">Settings</string>
 	<string name="button_bug">Bug or Suggestion?</string>
-	<string name="email_subject">Noble Call Tools Bug or Suggestion</string>
+	<string name="email_subject">Noble Call Conversation Tools Bug or Suggestion</string>
 	<string name="email_body">Please detail your suggestion or bug report below:</string>
-	<string name="creed_text">The Noble Call Tools application give you quick access to all the conversation tools that you learned at the Zero to Hero conference and more! Conciliatory, Courageous, Connecting, Comforting, Collaborating: they're all here and at your finger tips.\n\nNoble Call exists to help men experience God's pleasure as they discover their Noble Calling and become the men they were created to be: Noble Men who make Noble Plans and carry out Noble Deeds of great faith to produce fruit that will stand the test of eternity.</string>
+	<string name="creed_text">The Noble Call Conversation Tools application gives you quick access to all the conversation tools that you learned at the Zero to Hero conference and more! Conciliatory, Courageous, Connecting, Comforting, Collaborating: they're all here and at your finger tips.\n\nNoble Call exists to help men experience God's pleasure as they discover their Noble Calling and become the men they were created to be: Noble Men who make Noble Plans and carry out Noble Deeds of great faith to produce fruit that will stand the test of eternity.</string>
 	<string name="asv_name">American Standard Version</string>
 	<string name="asv_copyright">Public Domain</string>
 	<string name="asv_desc">The ASV has long been regarded by many scholars as the most literal English translation since the King James Version—maybe the most literal translation ever. This has made the translation very popular for careful English Bible study, but not for ease of reading. While the KJV was translated entirely from 'western manuscripts', the ASV 1901 was influenced also by the older 'eastern manuscripts' that form the basis for most of our modern English translations. Because the ASV 1901 is very difficult to find in print, Logos is pleased to be able to preserve and distribute this significant work. This is an excellent choice for comparative English study.</string>

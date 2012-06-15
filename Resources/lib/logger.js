@@ -67,11 +67,12 @@ function AssertException(message) {
 }
 
 AssertException.prototype.toString = function () {
-    return "AssertException " + getTime() + " " + arguments.callee.caller.name + ": " + this.message;
+    return "Assert Exception " + getTime() + " " + arguments.callee.caller.name + ": " + this.message;
 };
 
 exports.assert = function(exp, message) {
     if (!exp) {
-        throw new AssertException(message);
+        //throw new AssertException(message);
+        Ti.API.error(getTime() + " " + arguments.callee.caller.name + ": " + message);
     }
 }

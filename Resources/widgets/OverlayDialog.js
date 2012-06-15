@@ -1,6 +1,5 @@
-var log = require('helpers/logger');
+var log = require('lib/logger');
 var style = require('ui/style');
-var ui = require('ui/ui');
 
 // Main Class: creates a window to use as an Overlay dialog.
 function OverlayDialog(/*Window args*/args) {
@@ -14,7 +13,7 @@ function OverlayDialog(/*Window args*/args) {
 	args.layout = 'absolute';
 	args.modal = true;
 	
-	self.win = ui.window(args);
+	self.win = Ti.UI.createWindow(args);
 	
 	return self;
 }
@@ -24,8 +23,8 @@ function open(/* Text */message) {
 	
 	var self = this;
 	
-	var translucentView = ui.view({
-        top: ui.dim.gutter, left: ui.dim.gutter, right: ui.dim.gutter, bottom: ui.dim.gutter,
+	var translucentView = Ti.UI.createView({
+        top: style.gutter.size, left: style.gutter.size, right: style.gutter.size, bottom: style.gutter.size,
 		backgroundColor: style.win.backgroundColor,
 		opacity: style.translucentView.opacity,
 		borderRadius: 5,
@@ -34,7 +33,7 @@ function open(/* Text */message) {
 	self.win.add(translucentView);
 	
 	var textArea = Titanium.UI.createTextArea({
-        top: ui.dim.gutter, left: ui.dim.gutter, right: ui.dim.gutter, bottom: ui.dim.gutter,
+        top: style.gutter.size, left: style.gutter.size, right: style.gutter.size, bottom: style.button.height + style.gutter.size * 2,
 		editable: false,
 		font: style.font.huge,
 		value: message,
@@ -42,10 +41,10 @@ function open(/* Text */message) {
 	});
 	self.win.add(textArea);
 
-    var okButton =  ui.button({
-        bottom: ui.dim.gutter,
+    var okButton = Ti.UI.createButton({
+        bottom: style.gutter.size,
         width: '33%',
-        height:  Ti.UI.SIZE,
+        height:  style.button.height,
         title: L('button_ok')
     });
     self.win.add(okButton);
@@ -54,7 +53,7 @@ function open(/* Text */message) {
     }); 
 
     okButton.addEventListener('postlayout', function (e) {
-        var bottom = okButton.size.height + ui.dim.gutter * 2;
+        var bottom = okButton.size.height + style.gutter.size * 2;
         textArea.updateLayout({
              bottom: bottom  
         });
