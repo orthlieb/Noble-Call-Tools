@@ -16,13 +16,17 @@ function open(controller) {
     var self = this;
     var moreThanOnePage = self.urlArray.length > 1;
     var displayPagingArrows = false;
+    var scrollableViewBottom;
+
     switch (Ti.Platform.osname) {
         case 'iphone':
         case 'ipad':
+            scrollableViewBottom = moreThanOnePage ? 0 : style.gutter.size;
             break;
         case 'android':
         case 'mobileweb':
             displayPagingArrows = true;
+            scrollableViewBottom = moreThanOnePage ? style.pagingControl.height : style.gutter.size;
             break;
         case 'blackberry':
         default:
@@ -35,7 +39,8 @@ function open(controller) {
         title : self.title,
         barColor : style.win.barColor,
         backButtonTitle : L('button_done'),
-        backgroundImage : style.findImage('Background.png')
+        backgroundImage : style.findImage('BackgroundTile.png'),
+        backgroundRepeat: true,
     });
 
     if (displayPagingArrows && moreThanOnePage) {
@@ -86,10 +91,9 @@ function open(controller) {
         });
     }
 
-    // Create the scrollable view
     var scrollableView = Ti.UI.createScrollableView({
         left : style.gutter.size, top: style.gutter.size, 
-        right: style.gutter.size, bottom: moreThanOnePage ? style.pagingControl.height : style.gutter.size,
+        right: style.gutter.size, bottom: scrollableViewBottom,
         pagingControlColor : 'transparent',
         showPagingControl : moreThanOnePage && !displayPagingArrows,
         pagingControlHeight : moreThanOnePage ? style.pagingControl.height : 0,

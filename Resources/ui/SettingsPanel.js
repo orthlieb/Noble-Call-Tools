@@ -11,7 +11,8 @@ function open(controller) {
 
     var win = Ti.UI.createWindow({
         backButtonTitle: L('button_done'),
-        backgroundImage: style.findImage('Background.png'),
+        backgroundImage : style.findImage('BackgroundTile.png'),
+        backgroundRepeat: true,
         barColor: style.win.barColor,
         title : L('settings'),
         layout: 'vertical'
@@ -28,8 +29,10 @@ function open(controller) {
     // Banner
     var headerImage = Ti.UI.createImageView({
         image: style.findImage('Header.png'),
-        left: 0,
-        top: 0
+        center: { x: '50%' },
+        top: style.gutter.size,
+        width: Ti.UI.SIZE,
+        height: Ti.UI.SIZE
     });
     one.add(headerImage);
  

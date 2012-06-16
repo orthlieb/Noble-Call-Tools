@@ -181,6 +181,6 @@ var style = {
 };
 _.bindAll(style);
 
-style.set("leather");//Ti.App.Properties.getString("style", "linen"));
+style.set("linen");//Ti.App.Properties.getString("style", "linen"));
 
 module.exports = style;

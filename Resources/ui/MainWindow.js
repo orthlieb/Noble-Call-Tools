@@ -204,7 +204,8 @@ function mainButtonGridClick(e) {
             var win = Ti.UI.createWindow({// Need a window to host the grid.
                 backButtonTitle : L('button_done'),
                 backgroundColor : style.win.backgroundColor,
-                backgroundImage : style.findImage('Background.png'),
+                backgroundImage : style.findImage('BackgroundTile.png'),
+                backgroundRepeat: true,
                 barColor : style.win.barColor,
                 orientationModes : [Ti.UI.PORTRAIT],
                 title : L('courageous_conversation')
@@ -257,8 +258,8 @@ function open() {
     // Construct the main window and navigation controller.
     var w = Ti.UI.createWindow({
         title : L('app_title'),
-        backgroundColor : style.win.backgroundColor,
-        backgroundImage : style.findImage('Background.png')
+        backgroundImage : style.findImage('BackgroundTile.png'),
+        backgroundRepeat: true
     });
     navController = new NavigationController();
 

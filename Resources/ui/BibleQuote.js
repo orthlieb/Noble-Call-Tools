@@ -37,7 +37,8 @@ function BibleQuoteOpen(controller) {
 
 	var win = Ti.UI.createWindow({
 		backButtonTitle: L('button_done'),
-		backgroundImage: style.findImage('Background.png'),
+		backgroundImage: style.findImage('BackgroundTile.png'),
+		backgroundRepeat: true,
 		barColor: style.win.barColor,
 		title: self.bm.verse,
 		layout: 'absolute'
@@ -47,7 +48,8 @@ function BibleQuoteOpen(controller) {
         var od = new OverlayDialog({
             title : self.bm.bibles[self.bm.version].title,
             backgroundColor : style.win.backgroundColor,
-            backgroundImage : style.findImage('Background.png'),
+            backgroundImage : style.findImage('BackgroundTile.png'),
+            backgroundRepeat: true,
             barColor : style.win.barColor
         });
         od.open(self.bm.bibles[self.bm.version].description);
