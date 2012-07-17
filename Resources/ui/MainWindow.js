@@ -72,7 +72,7 @@ var courageousButtons = {
         text : L('the_two_agreements'),
         offset : 5,
         url : ['TheTwoAgreementsListener', 'TheTwoAgreementsSpeaker']
-    },
+    }, 
     'prayers' : {
         image : 'ButtonPray',
         text : L('prayers'),
@@ -197,11 +197,10 @@ function mainButtonGridClick(e) {
             showWebView(navController, mainButtons[theButton.id].text, mainButtons[theButton.id].url);
             break;
         case 'courageous':
-            var bg = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, courageousButtons, {
-                w : 85,
-                h : 117.5
-            }, courageousButtonClick);
+            // We want a maximum of three buttons across the narrowest aspect of the device.
+            var bg = new ButtonGrid(Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), courageousButtons, courageousButtonClick);
             var win = Ti.UI.createWindow({// Need a window to host the grid.
+                anchorPoint: { x: 0, y: 0 },
                 backButtonTitle : L('button_done'),
                 backgroundColor : style.win.backgroundColor,
                 backgroundImage : style.findImage('BackgroundTile.png'),
@@ -210,22 +209,18 @@ function mainButtonGridClick(e) {
                 orientationModes : [Ti.UI.PORTRAIT],
                 title : L('courageous_conversation')
             });
-
             win.add(bg.scrollview);
             navController.open(win);
-            // Add to the Nav controller.
-            bg.relayout(Ti.Platform.displayCaps.platformWidth);
-
-            // Handle orientation
+ 
+            // Handle orientation and close events
             function relayoutCourageousWindow(e) {
                 bg.relayout(Ti.Platform.displayCaps.platformWidth);
             }
-
-
             win.addEventListener('close', function courageousWindowClose(e) {
                 Ti.Gesture.removeEventListener('orientationchange', relayoutCourageousWindow);
             });
             Ti.Gesture.addEventListener('orientationchange', relayoutCourageousWindow);
+            relayoutCourageousWindow({});
             break;
         case 'identity':
             // There are 2 paths through identity. We need to ask the user whether they are a man or a woman.
@@ -257,6 +252,7 @@ function open() {
 
     // Construct the main window and navigation controller.
     var w = Ti.UI.createWindow({
+        anchorPoint: { x: 0, y: 0 },
         title : L('app_title'),
         backgroundImage : style.findImage('BackgroundTile.png'),
         backgroundRepeat: true
@@ -272,14 +268,13 @@ function open() {
     var InfoButton = require('widgets/InfoButton');
     var infoButton = new InfoButton();
     infoButton.attach(w, mainSettingsButtonClick);
-   
-    var mainButtonGrid = new ButtonGrid(Ti.Platform.displayCaps.platformWidth, mainButtons, {
-        w : 85,
-        h : 117.5
-    }, mainButtonGridClick);
-    // Must have a window to host the button grid.
+       
+    // We want a maximum of three buttons across the narrowest aspect of the device.
+    var mainButtonGrid = new ButtonGrid(Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), mainButtons, mainButtonGridClick);
     w.add(mainButtonGrid.scrollview);
+
     w.barColor = style.win.barColor;
+
     // Nav controller is our root.
     navController.open(w);
 

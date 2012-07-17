@@ -14,7 +14,7 @@ function InfoButtonAttach(/*TiUIWindow*/parent, /*function*/click) {
     switch (Ti.Platform.osname) {
         case 'iphone':
         case 'ipad':
-            // Info button for the selected bible.
+            // Info button.
             var infoButton = Ti.UI.createButton({
                 id: 'info',
                 systemButton:Ti.UI.iPhone.SystemButton.INFO_LIGHT       
@@ -23,15 +23,26 @@ function InfoButtonAttach(/*TiUIWindow*/parent, /*function*/click) {
             parent.rightNavButton = infoButton;
         break;
         case 'android':
+            // Info menu item.
             parent.activity.onCreateOptionsMenu = function createOptionsMenu(e) {
                 var menu = e.menu;
                 var menuItem = menu.add({
                     title : L('info'),
                     itemId : 0
                 });
-                menuItem.setIcon(style.findImage('info'));
+                menuItem.setIcon(style.findImage('Info.png'));
                 menuItem.addEventListener('click', click);
             };    
+        break;
+        case 'mobileweb':
+            // Info button.
+            var infoButton = Ti.UI.createButton({
+                id: 'info',
+                backgroundImage: style.findImage('Info.png'),
+                backgroundSelectedImage: style.findImage('InfoSelected.png')
+            });
+            infoButton.addEventListener('click', click);
+            parent.rightNavButton = infoButton;
         break;
         default:
             // XXX Add Blackberry, Windows, Mobile Web

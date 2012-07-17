@@ -1,46 +1,65 @@
 // === Button Grid View
 // A grid of buttons in a scroll view.
-// @viewWidth		integer	Width of the view (height is 'auto')
-// @buttons			array	Array button structs with the following properties [ {
-//                              id: unique string
-//                              title: string denoting the title/label on the button suitable for display
-//                              image: image to display (should be in images/<image>Normal.png and images/<image>Selected.png)
-//                              offset: offset in pixels from the bottom of the button for the label (useful for adjusting 1 vs 2 line labels)
-//                          } ]
-// @dimButtons		array       Array of w, h that defines the dimensions of the button image
-// XXX Might want to change this to be just the number of buttons to have across and a gutter?
+// @viewWidth		integer	    Width of the view (height is 'auto')
+// @buttons			object	    Object contining button structs with the following properties 
+//                              id: {
+//                                  title: string denoting the title/label on the button suitable for display
+//                                  image: image to display (should be in images/<image>Normal.png and images/<image>Selected.png)
+//                                  offset: offset in pixels from the bottom of the button for the label (useful for adjusting 1 vs 2 line labels)
+//                              }
 // @click           function    Function to call when a button is clicked.
 // returns: button grid object
 
 var log = require('lib/logger');
 var style = require('ui/style');
 
-function ButtonGrid(viewWidth, buttons, dimButtons, click) {
+function ButtonGrid(viewWidth, buttons, click) {
 	log.start();
 
 	this.click = click;
     this.buttons = [];
-    this.dimButton = dimButtons;
-    
+
+    // Scrollview holds our buttons in the button grid.    
     this.scrollview = Ti.UI.createScrollView({
 		contentWidth: Ti.UI.FILL,
 		contentHeight:'auto',
 		left: 0, top: 0, right: 0, bottom: 0,
 		showVerticalScrollIndicator: true
     });
-   
-    var j = 0;
-    for (var i in buttons) {
+  
+    var i, j = 0;
+    for (i in buttons) {
 		if (buttons.hasOwnProperty(i)) {
 		    log.info('Creating button ' + i);
 		    
+            if (j == 0) {
+		        // Determine the size of a button
+                var imageTemp = Ti.UI.createImageView({
+                  image : style.findImage(buttons[i].image + 'Normal.png'),
+                  height: Ti.UI.SIZE,
+                  width: Ti.UI.SIZE
+                });
+                var renderedImage = imageTemp.toImage();
+                imageTemp = null;
+                log.info( "Rendered Image Height=" + renderedImage.height + " width=" + renderedImage.width);
+                
+                // Account for gutter of number of buttons plus one additional.
+                this.buttonWidth = renderedImage.width;
+                this.buttonHeight = renderedImage.height;
+                this.across = Math.floor(viewWidth / renderedImage.width);
+                this.gutter = (viewWidth - this.across * renderedImage.width) / (this.across + 1);
+                log.info( "Across=" + this.across + " Gutter=" + this.gutter);
+
+                renderedImage = null;
+            }
+	    
 		    var buttonProps = {
-		       center: { x: '50%', y: '50%' },    
+		       left: 100, top: 100, //center: { x: '50%', y: '50%' },    
 		       id: i,
 		       backgroundImage: style.findImage(buttons[i].image + 'Normal.png'),
 		       backgroundSelectedImage: style.findImage(buttons[i].image + 'Selected.png'),
-		       width: this.dimButton.w,
-		       height: this.dimButton.h
+		       width: this.buttonWidth,
+		       height: this.buttonHeight
 		    };
 		    
 		    if (Ti.Platform.osname == "android"|| Ti.Platform.osname == "mobileweb") {
@@ -65,7 +84,7 @@ function ButtonGrid(viewWidth, buttons, dimButtons, click) {
                 var theLabel = Ti.UI.createLabel({
                     color: style.label.color,
                     backgroundColor: 'transparent',
-                    width: this.dimButton.w,
+                    width: this.buttonWidth,
                     height:Ti.UI.SIZE,
                     bottom: buttons[i].offset,
                     font: style.font.small,
@@ -81,6 +100,8 @@ function ButtonGrid(viewWidth, buttons, dimButtons, click) {
 		}
     }
     log.info('ButtonGrid: total of ' + this.buttons.length + ' buttons in this grid');
+    
+    return this;
 }
 
 function relayout(viewWidth) {
@@ -92,11 +113,12 @@ function relayout(viewWidth) {
     this.scrollview.contentWidth = viewWidth;
     this.scrollview.contentHeight = 'auto';
 
-    // Set up the layout information.
-    var numButtonsAcross = Math.floor(viewWidth / this.dimButton.w);
-    var gutter = (viewWidth - (numButtonsAcross * this.dimButton.w)) / (numButtonsAcross + 1);
-    log.info('ButtonGrid: Layout gutter = ' + gutter + ', laying out ' + this.buttons.length + ' buttons ' + numButtonsAcross + ' across.');
+    // Calculate the new gutter.
+    var gutter = (viewWidth - (this.buttonWidth * this.across)) / (this.across + 1);
 
+    log.info('ButtonGrid: Layout gutter = ' + gutter + ', laying out ' + this.buttons.length + ' buttons ');
+
+    // Start laying out the buttons.
     var layoutCursor = { x: gutter, y: gutter };
 	for (var i = 0; i < this.buttons.length; i++) {
 	    this.buttons[i].animate({
@@ -108,10 +130,10 @@ function relayout(viewWidth) {
 	    log.info("ButtonGrid: Layout button (" + layoutCursor.x + ', ' + layoutCursor.y + ')');
 	
 	    // Detect wrap around.
-	    layoutCursor.x += this.dimButton.w + gutter;
+	    layoutCursor.x += this.buttonWidth + gutter;
 	    if (layoutCursor.x >= viewWidth) {
 			layoutCursor.x = gutter;
-			layoutCursor.y += this.dimButton.h + gutter;
+			layoutCursor.y += this.buttonHeight + gutter;
 	    }
 	}
 }
