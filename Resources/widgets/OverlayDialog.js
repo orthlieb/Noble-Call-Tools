@@ -24,8 +24,9 @@ function open(/* Text */message) {
 	var self = this;
 	
 	var translucentView = Ti.UI.createView({
-        top: style.gutter.size, left: style.gutter.size, right: style.gutter.size, bottom: style.gutter.size,
-		backgroundColor: style.win.backgroundColor,
+        top: style.gutter.size, left: style.gutter.size, 
+        right: style.gutter.size, bottom: style.button.height + style.gutter.size * 2,
+  		backgroundColor: style.win.backgroundColor,
 		opacity: style.translucentView.opacity,
 		borderRadius: 5,
 		borderWidth: 1
@@ -33,7 +34,8 @@ function open(/* Text */message) {
 	self.win.add(translucentView);
 	
 	var textArea = Titanium.UI.createTextArea({
-        top: style.gutter.size, left: style.gutter.size, right: style.gutter.size, bottom: style.button.height + style.gutter.size * 2,
+        top: style.gutter.size, left: style.gutter.size, 
+        right: style.gutter.size, bottom: style.button.height + style.gutter.size * 2,
 		editable: false,
 		font: style.font.huge,
 		value: message,
@@ -52,17 +54,7 @@ function open(/* Text */message) {
         self.win.close();
     }); 
 
-    okButton.addEventListener('postlayout', function (e) {
-        var bottom = okButton.size.height + style.gutter.size * 2;
-        textArea.updateLayout({
-             bottom: bottom  
-        });
-        translucentView.updateLayout({
-            bottom: bottom
-        });
-    });
-
-	self.win.open();
+ 	self.win.open();
 }
 
 // External interface

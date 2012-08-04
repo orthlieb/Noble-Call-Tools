@@ -37,19 +37,23 @@ function BibleQuoteOpen(controller) {
 
 	var win = Ti.UI.createWindow({
 		backButtonTitle: L('button_done'),
-		backgroundImage: style.findImage('BackgroundTile.png'),
-		backgroundRepeat: true,
 		barColor: style.win.barColor,
 		title: self.bm.verse,
 		layout: 'absolute'
 	});
 
+    // Only here because windows don't support repeating backgrounds.
+    var view = Ti.UI.createView({
+        left: 0, top: 0, right: 0, bottom: 0,
+        backgroundImage: style.findImage('BackgroundTile.png'),
+        backgroundRepeat: true        
+    });
+    win.add(view);
+
     function BibleQuoteInfo() {
         var od = new OverlayDialog({
             title : self.bm.bibles[self.bm.version].title,
-            backgroundColor : style.win.backgroundColor,
-            backgroundImage : style.findImage('BackgroundTile.png'),
-            backgroundRepeat: true,
+            backgroundColor : 'black',
             barColor : style.win.barColor
         });
         od.open(self.bm.bibles[self.bm.version].description);
@@ -63,7 +67,7 @@ function BibleQuoteOpen(controller) {
         left: style.gutter.size,
         top: style.gutter.size,
         right: style.gutter.size,
-        height: style.textField.height,
+        height: style.comboBox.height,
         borderStyle: Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 	    editable: false,
 		font: style.font.medium,
@@ -72,16 +76,6 @@ function BibleQuoteOpen(controller) {
 	comboBox.addEventListener('change', function bibleChanged(e) { 
 		self.bm.setVersionVerse(e.value, self.bm.verse);
 	});
-    // comboBox.addEventListener('postlayout', function comboBoxPostLayout(e) {
-        // // Only want to relay out if our dependent items change
-        // var pos = { 
-            // top: comboBox.view.size.height + style.gutter.size * 2,
-            // bottom: self._copyrightLabel.size.height + style.gutter.size * 2
-        // };
-        // self._textArea.updateLayout(pos);
-        // translucentView.updateLayout(pos);
-        // log.info('Resizing top/bottom ' + translucentView.top + '/' + translucentView.bottom);
-    // });
     win.add(comboBox.view);
  
     // Nice opaque effect in the background.

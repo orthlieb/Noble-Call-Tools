@@ -1,4 +1,3 @@
-var SettingsPanel = require('ui/SettingsPanel');
 var NavigationController = require('widgets/NavigationController');
 var WebView = require('widgets/WebView');
 var ButtonGrid = require('widgets/ButtonGrid');
@@ -17,48 +16,48 @@ var navController;
 var mainButtons = {
     // id: image name, label, bottom offset for label
     'conciliatory' : {
-        image : 'ButtonDove',
+        image : 'buttongrid/ButtonDove',
         text : L('conciliatory_conversation'),
         offset : 5,
         url : ['ConciliatoryConversation1', 'ConciliatoryConversation2', 'ConciliatoryConversation3']
     },
     'great' : {
-        image : 'ButtonFlower',
+        image : 'buttongrid/ButtonFlower',
         text : L('a_great_response'),
         offset : 5,
         url : ['ComfortingConversation1', 'ComfortingConversation2', 'ComfortingConversation3', 'ComfortingConversation4', 'ComfortingConversation5', 'ComfortingConversation6', 'ComfortingConversation7', 'ComfortingConversation8']
     },
     'courageous' : {
-        image : 'ButtonCrown',
+        image : 'buttongrid/ButtonCrown',
         text : L('courageous_conversation'),
         offset : 5
     },
     'connecting' : {
-        image : 'ButtonHearts',
+        image : 'buttongrid/ButtonHearts',
         text : L('connecting_conversation'),
         offset : 5,
         url : ['ConnectingConversations', 'ConnectingConversations1', 'ConnectingConversations2', 'ConnectingConversations3', 'ConnectingConversations4', 'ConnectingConversations5', 'ConnectingConversations6', 'ConnectingConversations7', 'ConnectingConversations8', 'ConnectingConversations9']
     },
     'collaborating' : {
-        image : 'ButtonScales',
+        image : 'buttongrid/ButtonScales',
         text : L('collaborating_conversation'),
         offset : 5,
         url : ['CollaboratingConversation1']
     },
     'identity' : {
-        image : 'ButtonKnight',
+        image : 'buttongrid/ButtonKnight',
         text : L('noble_identity'),
         offset : 11,
         url : [['NobleIdentityRememberWhoseYouAre', 'NobleIdentityRememberWhoYouAreMen', 'NobleIdentityRememberWhoYourWifeIs'], ['NobleIdentityRememberWhoseYouAre', 'NobleIdentityRememberWhoYouAreWomen', 'NobleIdentityRememberWhoYourHusbandIs']]
     },
     'character' : {
-        image : 'ButtonCompass',
+        image : 'buttongrid/ButtonCompass',
         text : L('character'),
         offset : 5,
         url : ['CharacterOfChrist', 'CharacterDefinitions', 'CharacterGroupings']
     },
     'armor' : {
-        image : 'ButtonArmor',
+        image : 'buttongrid/ButtonArmor',
         text : L('armor_of_god'),
         offset : 11,
         url : ['ArmorOfGod', 'WarriorsCreed', 'BreastPlatePrayer']
@@ -68,25 +67,25 @@ var mainButtons = {
 var courageousButtons = {
     // id, image name, label, bottom offset for label
     'agreements' : {
-        image : 'ButtonAgreement',
+        image : 'buttongrid/ButtonAgreement',
         text : L('the_two_agreements'),
         offset : 5,
         url : ['TheTwoAgreementsListener', 'TheTwoAgreementsSpeaker']
     }, 
     'prayers' : {
-        image : 'ButtonPray',
+        image : 'buttongrid/ButtonPray',
         text : L('prayers'),
         offset : 11,
         url : [['CourageousPrayerHusbandAsListener', 'CourageousPrayerWifeAsSpeaker'], ['CourageousPrayerWifeAsListener', 'CourageousPrayerHusbandAsSpeaker']]
     },
     'questions' : {
-        image : 'ButtonQuestion',
+        image : 'buttongrid/ButtonQuestion',
         text : L('questions'),
         offset : 11,
         url : ['CourageousConversationIntro', 'CourageousConversationQuestion1', 'CourageousConversationQuestion2', 'CourageousConversationQuestion3', 'CourageousConversationQuestion4', 'CourageousConversationQuestion5', 'CourageousConversationQuestion6', 'CourageousConversationQuestion7', 'CourageousConversationQuestion8', 'CourageousConversationQuestion9', 'CourageousConversationQuestion10']
     },
     'words' : {
-        image : 'ButtonEmotions',
+        image : 'buttongrid/ButtonEmotions',
         text : L('emotion_words'),
         offset : 11,
         url : [['SoulInAdversityMen'], ['SoulInAdversityWomen']]
@@ -198,15 +197,16 @@ function mainButtonGridClick(e) {
             break;
         case 'courageous':
             // We want a maximum of three buttons across the narrowest aspect of the device.
-            var bg = new ButtonGrid(Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), courageousButtons, courageousButtonClick);
+            var bg = new ButtonGrid({
+                viewWidth: Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), 
+                buttons: courageousButtons, 
+                buttonWidth: style.buttonGrid.width,
+                buttonHeight: style.buttonGrid.height,
+                click: courageousButtonClick
+            });
             var win = Ti.UI.createWindow({// Need a window to host the grid.
                 anchorPoint: { x: 0, y: 0 },
-                backButtonTitle : L('button_done'),
-                backgroundColor : style.win.backgroundColor,
-                backgroundImage : style.findImage('BackgroundTile.png'),
-                backgroundRepeat: true,
                 barColor : style.win.barColor,
-                orientationModes : [Ti.UI.PORTRAIT],
                 title : L('courageous_conversation')
             });
             win.add(bg.scrollview);
@@ -220,7 +220,7 @@ function mainButtonGridClick(e) {
                 Ti.Gesture.removeEventListener('orientationchange', relayoutCourageousWindow);
             });
             Ti.Gesture.addEventListener('orientationchange', relayoutCourageousWindow);
-            relayoutCourageousWindow({});
+            setTimeout(relayoutCourageousWindow, 1000);
             break;
         case 'identity':
             // There are 2 paths through identity. We need to ask the user whether they are a man or a woman.
@@ -254,23 +254,26 @@ function open() {
     var w = Ti.UI.createWindow({
         anchorPoint: { x: 0, y: 0 },
         title : L('app_title'),
-        backgroundImage : style.findImage('BackgroundTile.png'),
-        backgroundRepeat: true
     });
     navController = new NavigationController();
 
-    // Create a Settings button on the parent window.
-    var mainSettingsPanel = new SettingsPanel();
-    function mainSettingsButtonClick(e) {
-        mainSettingsPanel.open(navController);
-    }
-    
+    // Create a Info button on the parent window.
     var InfoButton = require('widgets/InfoButton');
     var infoButton = new InfoButton();
-    infoButton.attach(w, mainSettingsButtonClick);
+    infoButton.attach(w, function mainInfoButtonClick(e) {
+        var InfoPanel = require('ui/InfoPanel');
+        var mainInfoPanel = new InfoPanel();   
+        mainInfoPanel.open(navController);
+    });
        
     // We want a maximum of three buttons across the narrowest aspect of the device.
-    var mainButtonGrid = new ButtonGrid(Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), mainButtons, mainButtonGridClick);
+    var mainButtonGrid = new ButtonGrid({
+        viewWidth: Math.min(Ti.Platform.displayCaps.platformWidth, Ti.Platform.displayCaps.platformHeight), 
+        buttons: mainButtons, 
+        buttonWidth: style.buttonGrid.width,
+        buttonHeight: style.buttonGrid.height,
+        click: mainButtonGridClick
+    });
     w.add(mainButtonGrid.scrollview);
 
     w.barColor = style.win.barColor;
@@ -284,7 +287,10 @@ function open() {
     }
     Ti.Gesture.addEventListener('orientationchange', relayoutMainWindow);
     
-    setTimeout(relayoutMainWindow, 1);
+    setTimeout(relayoutMainWindow, 1000);
+    
+    var density = Ti.Platform.displayCaps.density;
+    alert("Density: " + density + ' platformHeight: ' + Ti.Platform.displayCaps.platformHeight + ' platformWidth: ' + Ti.Platform.displayCaps.platformWidth);
 }
 
 // Exports

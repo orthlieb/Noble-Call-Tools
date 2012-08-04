@@ -39,9 +39,14 @@ function open(controller) {
         title : self.title,
         barColor : style.win.barColor,
         backButtonTitle : L('button_done'),
-        backgroundImage : style.findImage('BackgroundTile.png'),
-        backgroundRepeat: true,
     });
+    
+    var backView = Ti.UI.createView({
+        left: 0, top: 0, right: 0, bottom: 0,
+        backgroundImage : style.findImage('BackgroundTile.png'),
+        backgroundRepeat: true
+    });
+    win.add(backView);
 
     if (displayPagingArrows && moreThanOnePage) {
         // Views to hold next/previous indicators

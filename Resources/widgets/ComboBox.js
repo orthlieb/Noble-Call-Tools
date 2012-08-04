@@ -114,7 +114,7 @@ function ComboBox(/*TiUIWindow*/parent, /*TiUIcomboBoxArgs*/comboBoxArgs, /*Arra
             });
             break;
         default:
-            log.assert(false, "Cross platform code not implemented.");
+            log.assert(false, "ComboBox: cross platform code not implemented.");
             break;
     }
 
